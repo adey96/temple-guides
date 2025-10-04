@@ -9,6 +9,7 @@ A comprehensive, SEO-optimized Next.js website serving as a complete encyclopedi
 - **Complete Temple Database**: Comprehensive information about temples across India
 - **Advanced Search & Filters**: Search by state, deity, architecture style, category, and pilgrimage importance
 - **Individual Temple Pages**: Detailed pages for each temple with SEO optimization
+- **Interactive Maps**: Leaflet-based maps showing temple locations across India
 - **Responsive Design**: Mobile-first approach with Tailwind CSS
 - **Performance Optimized**: Next.js Image optimization, code splitting, and Core Web Vitals optimization
 - **Analytics Integration**: Google Analytics 4, Vercel Analytics, and Speed Insights
@@ -43,7 +44,7 @@ A comprehensive, SEO-optimized Next.js website serving as a complete encyclopedi
 1. **Clone the repository**
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/adey96/temple-guides.git
    cd temple-guides
    ```
 
@@ -90,6 +91,8 @@ temple-guides/
 │   │   │   ├── page.tsx       # Temples listing with filters
 │   │   │   └── [slug]/        # Individual temple pages
 │   │   │       └── page.tsx   # Dynamic temple page
+│   │   ├── maps/              # Interactive maps page
+│   │   ├── states/            # State-wise temple listings
 │   │   ├── about/             # About page
 │   │   ├── contact/           # Contact page
 │   │   ├── api/               # API routes
@@ -98,9 +101,12 @@ temple-guides/
 │   │   ├── ui/                # Reusable UI components
 │   │   ├── layout/            # Layout components (Header, Footer)
 │   │   ├── forms/             # Form components
-│   │   └── seo/               # SEO components
+│   │   ├── seo/               # SEO components
+│   │   └── TempleMap.tsx      # Interactive map component
 │   ├── data/                  # Static data files
-│   │   └── temples.ts         # Comprehensive temple data
+│   │   ├── temples.ts         # Comprehensive temple data (318 temples)
+│   │   ├── temple-updates.ts  # Dynamic content management
+│   │   └── blog-posts.ts      # Blog content
 │   └── lib/                   # Utility functions
 │       ├── utils.ts           # Common utilities
 │       ├── seo.ts             # SEO configuration
@@ -123,6 +129,7 @@ temple-guides/
 ### Key Features
 
 - **Temple Search**: Advanced search with multiple filters
+- **Interactive Maps**: Leaflet-based maps with temple markers
 - **Category Browsing**: Browse by Ancient, Medieval, Modern, UNESCO Heritage
 - **State-wise Navigation**: Find temples by Indian states
 - **Pilgrimage Priority**: High, Medium, Low priority classification
