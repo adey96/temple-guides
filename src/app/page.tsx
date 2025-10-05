@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -18,6 +18,17 @@ import {
   Building,
   Heart,
   Zap,
+  Quote,
+  TrendingUp,
+  Globe,
+  BookOpen,
+  Sparkles,
+  ChevronRight,
+  Play,
+  Mail,
+  Bell,
+  Eye,
+  Share2,
 } from "lucide-react";
 import Button from "@/components/ui/Button";
 import Card, {
@@ -28,8 +39,42 @@ import Card, {
 } from "@/components/ui/Card";
 import { temples, templeCategories, states, deities } from "@/data/temples";
 
+// Animated Counter Component
+function AnimatedCounter({ end, duration = 2000 }: { end: number; duration?: number }) {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    let startTime: number;
+    const startCount = 0;
+    const endCount = end;
+
+    const updateCount = (currentTime: number) => {
+      if (!startTime) startTime = currentTime;
+      const progress = Math.min((currentTime - startTime) / duration, 1);
+      
+      const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+      const currentCount = Math.floor(startCount + (endCount - startCount) * easeOutQuart);
+      
+      setCount(currentCount);
+
+      if (progress < 1) {
+        requestAnimationFrame(updateCount);
+      }
+    };
+
+    requestAnimationFrame(updateCount);
+  }, [end, duration]);
+
+  return <span>{count.toLocaleString()}</span>;
+}
+
 export default function HomePage() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
 
   // Calculate comprehensive statistics
   const stats = useMemo(() => {
@@ -145,9 +190,12 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
-            <div className="text-center p-6 bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl">
+            <div className={`text-center p-6 bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+              <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Building className="h-8 w-8 text-white" />
+              </div>
               <div className="text-5xl font-bold text-amber-600 mb-2">
-                {temples.length}
+                <AnimatedCounter end={temples.length} />
               </div>
               <div className="text-xl font-semibold text-gray-900 mb-1">
                 Temples
@@ -156,27 +204,36 @@ export default function HomePage() {
                 Comprehensively documented
               </div>
             </div>
-            <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl">
+            <div className={`text-center p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl transform transition-all duration-1000 delay-200 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Globe className="h-8 w-8 text-white" />
+              </div>
               <div className="text-5xl font-bold text-blue-600 mb-2">
-                {states.length}
+                <AnimatedCounter end={states.length} />
               </div>
               <div className="text-xl font-semibold text-gray-900 mb-1">
                 States
               </div>
               <div className="text-sm text-gray-600">Across India</div>
             </div>
-            <div className="text-center p-6 bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl">
+            <div className={`text-center p-6 bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl transform transition-all duration-1000 delay-400 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+              <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Heart className="h-8 w-8 text-white" />
+              </div>
               <div className="text-5xl font-bold text-green-600 mb-2">
-                {deities.length}
+                <AnimatedCounter end={deities.length} />
               </div>
               <div className="text-xl font-semibold text-gray-900 mb-1">
                 Deities
               </div>
               <div className="text-sm text-gray-600">Represented</div>
             </div>
-            <div className="text-center p-6 bg-gradient-to-br from-purple-50 to-violet-50 rounded-2xl">
+            <div className={`text-center p-6 bg-gradient-to-br from-purple-50 to-violet-50 rounded-2xl transform transition-all duration-1000 delay-600 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+              <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-violet-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <BookOpen className="h-8 w-8 text-white" />
+              </div>
               <div className="text-5xl font-bold text-purple-600 mb-2">
-                {templeCategories.length}
+                <AnimatedCounter end={templeCategories.length} />
               </div>
               <div className="text-xl font-semibold text-gray-900 mb-1">
                 Categories
@@ -312,6 +369,156 @@ export default function HomePage() {
                     </Button>
                   </div>
                 </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Temple of the Day */}
+      <section className="py-20 bg-gradient-to-br from-amber-50 via-orange-50 to-red-50">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-white text-sm font-semibold mb-4">
+              <Sparkles className="h-4 w-4 mr-2" />
+              Featured Today
+            </div>
+            <h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+              Temple of the Day
+            </h2>
+            <p className="mt-6 text-xl text-gray-600 max-w-3xl mx-auto">
+              Discover today's highlighted temple with its unique history and significance
+            </p>
+          </div>
+          
+          <div className="max-w-4xl mx-auto">
+            <Card className="overflow-hidden shadow-2xl">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
+                <div className="relative h-80 lg:h-full">
+                  <Image
+                    src={stats.featuredTemples[0].images.main}
+                    alt={stats.featuredTemples[0].name}
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <div className="absolute bottom-6 left-6 text-white">
+                    <div className="flex items-center mb-2">
+                      <Star className="h-5 w-5 text-amber-400 mr-2" />
+                      <span className="text-sm font-medium">Today's Highlight</span>
+                    </div>
+                    <h3 className="text-2xl font-bold">{stats.featuredTemples[0].name}</h3>
+                    <p className="text-amber-100">{stats.featuredTemples[0].city}, {stats.featuredTemples[0].state}</p>
+                  </div>
+                </div>
+                <div className="p-8">
+                  <div className="space-y-6">
+                    <div>
+                      <h4 className="text-lg font-semibold text-gray-900 mb-2">Quick Facts</h4>
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <span className="text-gray-600">Deity:</span>
+                          <div className="font-medium">{stats.featuredTemples[0].deity}</div>
+                        </div>
+                        <div>
+                          <span className="text-gray-600">Architecture:</span>
+                          <div className="font-medium">{stats.featuredTemples[0].architecture.style}</div>
+                        </div>
+                        <div>
+                          <span className="text-gray-600">Category:</span>
+                          <div className="font-medium">{stats.featuredTemples[0].category}</div>
+                        </div>
+                        <div>
+                          <span className="text-gray-600">Pilgrimage:</span>
+                          <div className="font-medium">{stats.featuredTemples[0].pilgrimage.importance}</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-semibold text-gray-900 mb-2">About This Temple</h4>
+                      <p className="text-gray-600 leading-relaxed">
+                        {stats.featuredTemples[0].content.overview.substring(0, 200)}...
+                      </p>
+                    </div>
+                    <div className="flex gap-4">
+                      <Link href={`/temples/${stats.featuredTemples[0].slug}`}>
+                        <Button className="flex-1">
+                          <Eye className="h-4 w-4 mr-2" />
+                          Explore Details
+                        </Button>
+                      </Link>
+                      <Button variant="outline" className="flex-1">
+                        <Share2 className="h-4 w-4 mr-2" />
+                        Share
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-20 bg-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+              What People Say
+            </h2>
+            <p className="mt-6 text-xl text-gray-600 max-w-3xl mx-auto">
+              Discover how our temple encyclopedia has helped pilgrims and travelers
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              {
+                name: "Priya Sharma",
+                location: "Delhi, India",
+                avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
+                content: "This encyclopedia helped me plan my spiritual journey across India. The detailed information about each temple's history and significance made my pilgrimage truly meaningful.",
+                rating: 5
+              },
+              {
+                name: "Rajesh Kumar",
+                location: "Mumbai, India",
+                avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+                content: "As a history enthusiast, I love how comprehensive the temple information is. The architectural details and mythological stories are fascinating.",
+                rating: 5
+              },
+              {
+                name: "Sarah Johnson",
+                location: "London, UK",
+                avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+                content: "The interactive maps feature is incredible! I could easily find temples near my travel route and plan my visits accordingly.",
+                rating: 5
+              }
+            ].map((testimonial, index) => (
+              <Card key={index} className="p-6 hover:shadow-lg transition-shadow">
+                <div className="flex items-center mb-4">
+                  <Image
+                    src={testimonial.avatar}
+                    alt={testimonial.name}
+                    width={50}
+                    height={50}
+                    className="rounded-full"
+                  />
+                  <div className="ml-4">
+                    <h4 className="font-semibold text-gray-900">{testimonial.name}</h4>
+                    <p className="text-sm text-gray-600">{testimonial.location}</p>
+                  </div>
+                </div>
+                <div className="flex mb-4">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star key={i} className="h-4 w-4 text-amber-400 fill-current" />
+                  ))}
+                </div>
+                <blockquote className="text-gray-600 italic">
+                  <Quote className="h-4 w-4 text-gray-400 inline mr-1" />
+                  {testimonial.content}
+                </blockquote>
               </Card>
             ))}
           </div>
@@ -613,6 +820,68 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Newsletter Signup */}
+      <section className="py-20 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 relative overflow-hidden">
+        <div className="absolute inset-0 bg-black/20"></div>
+        <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
+          <div className="mb-8">
+            <Bell className="h-16 w-16 text-white mx-auto mb-6" />
+            <h2 className="text-4xl font-bold tracking-tight text-white sm:text-5xl mb-4">
+              Stay Updated
+            </h2>
+            <p className="text-xl text-indigo-100 max-w-2xl mx-auto">
+              Get weekly updates about new temples, festivals, and spiritual insights delivered to your inbox
+            </p>
+          </div>
+          
+          <div className="max-w-md mx-auto">
+            <div className="flex gap-4">
+              <div className="flex-1">
+                <input
+                  type="email"
+                  placeholder="Enter your email address"
+                  className="w-full px-6 py-4 text-lg border border-white/20 rounded-xl bg-white/10 text-white placeholder-indigo-200 focus:ring-2 focus:ring-white focus:border-transparent backdrop-blur-sm"
+                />
+              </div>
+              <Button size="lg" className="px-8 py-4 text-lg bg-white text-indigo-600 hover:bg-indigo-50">
+                <Mail className="h-5 w-5 mr-2" />
+                Subscribe
+              </Button>
+            </div>
+            <p className="text-sm text-indigo-200 mt-4">
+              Join 10,000+ spiritual seekers. Unsubscribe anytime.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Floating Action Buttons */}
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-4">
+        <Link href="/maps">
+          <Button
+            size="lg"
+            className="rounded-full w-14 h-14 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110"
+          >
+            <Layers className="h-6 w-6" />
+          </Button>
+        </Link>
+        <Link href="/temples">
+          <Button
+            size="lg"
+            className="rounded-full w-14 h-14 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110"
+          >
+            <Compass className="h-6 w-6" />
+          </Button>
+        </Link>
+        <Button
+          size="lg"
+          className="rounded-full w-14 h-14 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110"
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        >
+          <ArrowRight className="h-6 w-6 rotate-[-90deg]" />
+        </Button>
+      </div>
 
       {/* Final CTA Section */}
       <section className="py-24 bg-gradient-to-br from-amber-600 via-orange-600 to-red-600 relative overflow-hidden">
